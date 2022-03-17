@@ -1,4 +1,5 @@
-# weather_with_chad_api
+# weather_with_WeatherApi.com
+Powered by <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a>
 
 A new Flutter project.
 
