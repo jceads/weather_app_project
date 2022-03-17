@@ -71,21 +71,21 @@ class Location {
 class Current {
   int? lastUpdatedEpoch;
   String? lastUpdated;
-  int? tempC;
+  double? tempC;
   int? isDay;
   Condition? condition;
-  int? windKph;
+  double? windKph;
   int? windDegree;
   String? windDir;
-  int? pressureMb;
+  double? pressureMb;
   double? pressureIn;
-  int? precipMm;
-  int? precipIn;
+  double? precipMm;
+  double? precipIn;
   int? humidity;
   int? cloud;
   double? feelslikeC;
-  int? visKm;
-  int? uv;
+  double? visKm;
+  double? uv;
   double? gustKph;
   AirQuality? airQuality;
 
@@ -193,7 +193,7 @@ class AirQuality {
   double? o3;
   double? so2;
   double? pm25;
-  int? pm10;
+  double? pm10;
   int? usEpaIndex;
   int? gbDefraIndex;
 
