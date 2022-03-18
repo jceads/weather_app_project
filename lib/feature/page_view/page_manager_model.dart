@@ -15,6 +15,9 @@ class PageManagerCubit extends Cubit<PageManagerState> {
   IGetWeatherInfoService service;
   BaseModel? oldModel;
   BaseModel? newModel;
+  void goToState(PageManagerState state) {
+    emit(state);
+  }
 
   void redirect() {
     if (baseModelList.isEmpty) {
@@ -25,6 +28,7 @@ class PageManagerCubit extends Cubit<PageManagerState> {
   }
 
   Future<void> getData(String city) async {
+    emit(LoadingState());
     if (oldModel == null) {
       oldModel = await service.getAsBaseModel(city);
       if (oldModel != null) {
