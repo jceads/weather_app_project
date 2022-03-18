@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 
 import 'package:weather_with_chad_api/product/enums/service_path.dart';
 import 'package:weather_with_chad_api/product/models/astronomy_model.dart';
+import 'package:weather_with_chad_api/product/models/base_model.dart/base_model.dart';
 import 'package:weather_with_chad_api/product/models/forecast_model.dart';
 import 'package:weather_with_chad_api/product/models/location_model.dart';
 import 'package:weather_with_chad_api/product/models/realtime_model.dart';
@@ -18,6 +19,7 @@ abstract class IGetWeatherInfoService {
   Future<ForeCastModel?> getForecastData(String city, {int day});
   Future<AstronomyModel?> getAstronomyData(String city);
   Future<LocationModel?> getLocationData(String city);
+  Future<BaseModel?> getAsBaseModel(String city);
 }
 
 class GetWeatherInfoService extends IGetWeatherInfoService {
@@ -52,6 +54,7 @@ class GetWeatherInfoService extends IGetWeatherInfoService {
       log("response path${e.requestOptions.path}");
       log("response code${e.response?.statusCode}");
     }
+    return null;
   }
 
   @override
@@ -67,6 +70,7 @@ class GetWeatherInfoService extends IGetWeatherInfoService {
       log("response path${e.requestOptions.path}");
       log("response code${e.response?.statusCode}");
     }
+    return null;
   }
 
   @override
@@ -82,5 +86,13 @@ class GetWeatherInfoService extends IGetWeatherInfoService {
       log("response path${e.requestOptions.path}");
       log("response code${e.response?.statusCode}");
     }
+    return null;
+  }
+
+  @override
+  Future<BaseModel?> getAsBaseModel(String city) async {
+    final forecast = await getForecastData(city);
+    final realTimeModel = await getCurrentData(city);
+    return BaseModel(forecast, realTimeModel);
   }
 }

@@ -1,8 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:weather_with_chad_api/core/constants/pad_value.dart';
+import 'package:weather_with_chad_api/core/custom_widgets/city_name_text.dart';
+import 'package:weather_with_chad_api/core/custom_widgets/hours_of_day.dart';
+import 'package:weather_with_chad_api/core/custom_widgets/next_days_temp.dart';
+import 'package:weather_with_chad_api/core/custom_widgets/standart_divider.dart';
+import 'package:weather_with_chad_api/product/models/forecast_model.dart';
+import 'package:weather_with_chad_api/product/models/realtime_model.dart';
+
+import '../../core/custom_widgets/little_spacer_sizedbox.dart';
+import '../../core/custom_widgets/todays_highest_lowest.dart';
+import '../../core/custom_widgets/todays_icon.dart';
+import '../../core/custom_widgets/top_bar.dart';
 
 class CurrentCityView extends StatelessWidget {
-  CurrentCityView({Key? key}) : super(key: key);
+  CurrentCityView(
+      {Key? key,
+      required this.realTimeModel,
+      required this.foreCastModel,
+      required this.currentIndex,
+      required this.index})
+      : super(key: key);
+  RealTimeModel? realTimeModel;
+  ForeCastModel? foreCastModel;
+  int index;
+  int currentIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -20,211 +41,37 @@ class CurrentCityView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: IconButton(
-                            icon: const Icon(Icons.menu),
-                            onPressed: () {},
-                          )),
-                      const Text("Mon, July 6"),
-                      const Padding(
-                          padding: PaddingValue.padAll, child: Text("C"))
-                    ]),
+              TopBarWidget(
+                onTapEvent: () {},
+                textDays: realTimeModel?.current?.condition?.text ?? "null",
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(children: [
-                    Text(
-                      "Kyiv",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5
-                          ?.copyWith(color: Colors.white),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: const [
-                        Icon(Icons.circle, size: 8),
-                        SizedBox(width: 5),
-                        Icon(Icons.circle, size: 8),
-                        SizedBox(width: 5),
-                        Icon(Icons.circle, size: 8),
-                        SizedBox(width: 5),
-                        Icon(Icons.circle, size: 8),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-                    Text(
-                      "28°C",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2
-                          ?.copyWith(color: Colors.white),
-                    ),
-                    Row(
-                      children: [
-                        Row(
-                          children: const [
-                            Icon(Icons.keyboard_arrow_up),
-                            Text("31°")
-                          ],
-                        ),
-                        Row(
-                          children: const [
-                            Icon(Icons.keyboard_arrow_down),
-                            Text("19°")
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-                    Text("Sunny", style: Theme.of(context).textTheme.bodyLarge),
-                    Text("Feels like 29°",
-                        style: Theme.of(context).textTheme.bodySmall),
-                    const SizedBox(
-                      height: 20,
-                    )
-                  ]),
-                  Stack(children: const [
-                    Positioned(
-                      child: Icon(Icons.wb_sunny_outlined, size: 120),
-                      left: 40,
-                      top: 40,
-                    ),
-                    CircleAvatar(
-                        minRadius: 100, backgroundColor: Colors.white12),
-                  ]),
-                ],
-              ),
+              FirstHalfBuil(context, index),
               Column(
                 children: [
-                  const Divider(
-                    thickness: 2,
-                    height: 10,
-                    color: Colors.white12,
+                  stdDivider(),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) =>
+                          NextDaysTemp(model: foreCastModel, index: index),
+                      itemCount: foreCastModel?.forecast?.forecastday?.length,
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            Text("Now",
-                                style: Theme.of(context).textTheme.bodySmall),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "28°",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(color: Colors.white),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            Text("Now",
-                                style: Theme.of(context).textTheme.bodySmall),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "28°",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(color: Colors.white),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            Text("Now",
-                                style: Theme.of(context).textTheme.bodySmall),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "25°",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(color: Colors.white),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            Text("Now",
-                                style: Theme.of(context).textTheme.bodySmall),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "30°",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(color: Colors.white),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            Text("Now",
-                                style: Theme.of(context).textTheme.bodySmall),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "31°",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(color: Colors.white),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Divider(
-                    thickness: 2,
-                    height: 10,
-                    color: Colors.white12,
-                  ),
+                  stdDivider(),
                   const SizedBox(height: 20),
-                  Column(
-                    children: [
-                      other_day(context),
-                      other_day(context),
-                      other_day(context),
-                      other_day(context),
-                      other_day(context),
-                      other_day(context),
-                    ],
+                  SizedBox(
+                    height: 200,
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return HourOfDay(
+                            model: foreCastModel ?? ForeCastModel(),
+                            index: index);
+                      },
+                      itemCount: foreCastModel
+                          ?.forecast?.forecastday?[index].hour?.length,
+                    ),
                   )
                 ],
               )
@@ -233,6 +80,48 @@ class CurrentCityView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Row FirstHalfBuil(BuildContext context, int i) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Column(children: [
+          CustomCityText(realTimeModel?.location?.name ?? "City null", context),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(i,
+                (index) => Icon(Icons.circle, size: currentIndex == i ? 8 : 4)),
+          ),
+          LittleSizedBox(context, 2),
+          currentDegree(context, "${realTimeModel?.current?.tempC}"),
+          TodaysHighestLatest(
+              highest: "${realTimeModel?.current?.humidity}", lowest: "19"),
+          LittleSizedBox(context, 5),
+          commentOfTheDay(
+              context, "${realTimeModel?.current?.condition?.text}"),
+          feelsDegree(context, "${realTimeModel?.current?.feelslikeC}"),
+          LittleSizedBox(context, 2),
+        ]),
+        TodaysIcon(context: context, icon: Icons.sunny)
+      ],
+    );
+  }
+
+  Text feelsDegree(BuildContext context, String degree) {
+    return Text("$degree°", style: Theme.of(context).textTheme.bodySmall);
+  }
+
+  Text commentOfTheDay(BuildContext context, String comment) =>
+      Text(comment, style: Theme.of(context).textTheme.bodyLarge);
+
+  Text currentDegree(BuildContext context, String value) {
+    return Text("$value°C",
+        style: Theme.of(context)
+            .textTheme
+            .headline2
+            ?.copyWith(color: Colors.white));
   }
 
   Padding other_day(BuildContext context) {

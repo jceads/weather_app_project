@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'feature/current_city/current_city_view.dart';
+import 'feature/page_view/page_manager.dart';
 
 void main() => runApp(const MyApp());
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
             color: Colors.white,
           )),
       debugShowCheckedModeBanner: false,
-      home: CurrentCityView(),
+      home: PageManager(),
     );
   }
 }
