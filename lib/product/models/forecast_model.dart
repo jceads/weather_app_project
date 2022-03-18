@@ -1,108 +1,38 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'realtime_model.dart';
 
-part 'forecast_model.g.dart';
-
-@JsonSerializable()
-class ForecastModel {
+class ForeCastModel {
   Location? location;
   Current? current;
   Forecast? forecast;
-  Alerts? alerts;
 
-  ForecastModel({this.location, this.current, this.forecast, this.alerts});
+  ForeCastModel({this.location, this.current, this.forecast});
 
-  factory ForecastModel.fromJson(Map<String, dynamic> json) {
-    return _$ForecastModelFromJson(json);
+  ForeCastModel.fromJson(Map<String, dynamic> json) {
+    location = json['location'] != null
+        ? new Location.fromJson(json['location'])
+        : null;
+    current =
+        json['current'] != null ? new Current.fromJson(json['current']) : null;
+    forecast = json['forecast'] != null
+        ? new Forecast.fromJson(json['forecast'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
-    return _$ForecastModelToJson(this);
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (location != null) {
+      data['location'] = location!.toJson();
+    }
+    if (current != null) {
+      data['current'] = current!.toJson();
+    }
+    if (forecast != null) {
+      data['forecast'] = forecast!.toJson();
+    }
+    return data;
   }
 }
 
-@JsonSerializable()
-class Location {
-  String? name;
-  String? region;
-  String? country;
-  double? lat;
-  double? lon;
-  String? tzId;
-  int? localtimeEpoch;
-  String? localtime;
-
-  Location(
-      {this.name,
-      this.region,
-      this.country,
-      this.lat,
-      this.lon,
-      this.tzId,
-      this.localtimeEpoch,
-      this.localtime});
-
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return _$LocationFromJson(json);
-  }
-
-  Map<String, dynamic> toJson() {
-    return _$LocationToJson(this);
-  }
-}
-
-@JsonSerializable()
-class Current {
-  int? lastUpdatedEpoch;
-  String? lastUpdated;
-  int? tempC;
-  int? isDay;
-  Condition? condition;
-  double? windKph;
-  int? windDegree;
-  String? windDir;
-  int? pressureMb;
-  double? pressureIn;
-  int? precipMm;
-  int? precipIn;
-  int? humidity;
-  int? cloud;
-  double? feelslikeC;
-  int? visKm;
-  int? uv;
-  int? gustKph;
-  AirQuality? airQuality;
-
-  Current(
-      {this.lastUpdatedEpoch,
-      this.lastUpdated,
-      this.tempC,
-      this.isDay,
-      this.condition,
-      this.windKph,
-      this.windDegree,
-      this.windDir,
-      this.pressureMb,
-      this.pressureIn,
-      this.precipMm,
-      this.precipIn,
-      this.humidity,
-      this.cloud,
-      this.feelslikeC,
-      this.visKm,
-      this.uv,
-      this.gustKph,
-      this.airQuality});
-
-  factory Current.fromJson(Map<String, dynamic> json) {
-    return _$CurrentFromJson(json);
-  }
-
-  Map<String, dynamic> toJson() {
-    return _$CurrentToJson(this);
-  }
-}
-
-@JsonSerializable()
 class Condition {
   String? text;
   String? icon;
@@ -110,20 +40,25 @@ class Condition {
 
   Condition({this.text, this.icon, this.code});
 
-  factory Condition.fromJson(Map<String, dynamic> json) {
-    return _$ConditionFromJson(json);
+  Condition.fromJson(Map<String, dynamic> json) {
+    text = json['text'];
+    icon = json['icon'];
+    code = json['code'];
   }
 
   Map<String, dynamic> toJson() {
-    return _$ConditionToJson(this);
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['text'] = text;
+    data['icon'] = icon;
+    data['code'] = code;
+    return data;
   }
 }
 
-@JsonSerializable()
 class AirQuality {
   double? co;
   double? no2;
-  double? o3;
+  int? o3;
   double? so2;
   double? pm25;
   double? pm10;
@@ -140,31 +75,54 @@ class AirQuality {
       this.usEpaIndex,
       this.gbDefraIndex});
 
-  factory AirQuality.fromJson(Map<String, dynamic> json) {
-    return _$AirQualityFromJson(json);
+  AirQuality.fromJson(Map<String, dynamic> json) {
+    co = json['co'];
+    no2 = json['no2'];
+    o3 = json['o3'];
+    so2 = json['so2'];
+    pm25 = json['pm2_5'];
+    pm10 = json['pm10'];
+    usEpaIndex = json['us-epa-index'];
+    gbDefraIndex = json['gb-defra-index'];
   }
 
   Map<String, dynamic> toJson() {
-    return _$AirQualityToJson(this);
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['co'] = co;
+    data['no2'] = no2;
+    data['o3'] = o3;
+    data['so2'] = so2;
+    data['pm2_5'] = pm25;
+    data['pm10'] = pm10;
+    data['us-epa-index'] = usEpaIndex;
+    data['gb-defra-index'] = gbDefraIndex;
+    return data;
   }
 }
 
-@JsonSerializable()
 class Forecast {
   List<Forecastday>? forecastday;
 
   Forecast({this.forecastday});
 
-  factory Forecast.fromJson(Map<String, dynamic> json) {
-    return _$ForecastFromJson(json);
+  Forecast.fromJson(Map<String, dynamic> json) {
+    if (json['forecastday'] != null) {
+      forecastday = <Forecastday>[];
+      json['forecastday'].forEach((v) {
+        forecastday!.add(new Forecastday.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    return _$ForecastToJson(this);
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (forecastday != null) {
+      data['forecastday'] = forecastday!.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 
-@JsonSerializable()
 class Forecastday {
   String? date;
   int? dateEpoch;
@@ -174,16 +132,36 @@ class Forecastday {
 
   Forecastday({this.date, this.dateEpoch, this.day, this.astro, this.hour});
 
-  factory Forecastday.fromJson(Map<String, dynamic> json) {
-    return _$ForecastdayFromJson(json);
+  Forecastday.fromJson(Map<String, dynamic> json) {
+    date = json['date'];
+    dateEpoch = json['date_epoch'];
+    day = json['day'] != null ? new Day.fromJson(json['day']) : null;
+    astro = json['astro'] != null ? new Astro.fromJson(json['astro']) : null;
+    if (json['hour'] != null) {
+      hour = <Hour>[];
+      json['hour'].forEach((v) {
+        hour!.add(new Hour.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    return _$ForecastdayToJson(this);
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['date'] = date;
+    data['date_epoch'] = dateEpoch;
+    if (day != null) {
+      data['day'] = day!.toJson();
+    }
+    if (astro != null) {
+      data['astro'] = astro!.toJson();
+    }
+    if (hour != null) {
+      data['hour'] = hour!.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 
-@JsonSerializable()
 class Day {
   double? maxtempC;
   double? mintempC;
@@ -191,14 +169,14 @@ class Day {
   double? maxwindKph;
   double? totalprecipMm;
   double? totalprecipIn;
-  int? avgvisKm;
-  int? avghumidity;
+  double? avgvisKm;
+  double? avghumidity;
   int? dailyWillItRain;
   int? dailyChanceOfRain;
   int? dailyWillItSnow;
   int? dailyChanceOfSnow;
   Condition? condition;
-  int? uv;
+  double? uv;
 
   Day(
       {this.maxtempC,
@@ -216,16 +194,47 @@ class Day {
       this.condition,
       this.uv});
 
-  factory Day.fromJson(Map<String, dynamic> json) {
-    return _$DayFromJson(json);
+  Day.fromJson(Map<String, dynamic> json) {
+    maxtempC = json['maxtemp_c'];
+    mintempC = json['mintemp_c'];
+    avgtempC = json['avgtemp_c'];
+    maxwindKph = json['maxwind_kph'];
+    totalprecipMm = json['totalprecip_mm'];
+    totalprecipIn = json['totalprecip_in'];
+    avgvisKm = json['avgvis_km'];
+    avghumidity = json['avghumidity'];
+    dailyWillItRain = json['daily_will_it_rain'];
+    dailyChanceOfRain = json['daily_chance_of_rain'];
+    dailyWillItSnow = json['daily_will_it_snow'];
+    dailyChanceOfSnow = json['daily_chance_of_snow'];
+    condition = json['condition'] != null
+        ? new Condition.fromJson(json['condition'])
+        : null;
+    uv = json['uv'];
   }
 
   Map<String, dynamic> toJson() {
-    return _$DayToJson(this);
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['maxtemp_c'] = maxtempC;
+    data['mintemp_c'] = mintempC;
+    data['avgtemp_c'] = avgtempC;
+    data['maxwind_kph'] = maxwindKph;
+    data['totalprecip_mm'] = totalprecipMm;
+    data['totalprecip_in'] = totalprecipIn;
+    data['avgvis_km'] = avgvisKm;
+    data['avghumidity'] = avghumidity;
+    data['daily_will_it_rain'] = dailyWillItRain;
+    data['daily_chance_of_rain'] = dailyChanceOfRain;
+    data['daily_will_it_snow'] = dailyWillItSnow;
+    data['daily_chance_of_snow'] = dailyChanceOfSnow;
+    if (condition != null) {
+      data['condition'] = condition!.toJson();
+    }
+    data['uv'] = uv;
+    return data;
   }
 }
 
-@JsonSerializable()
 class Astro {
   String? sunrise;
   String? sunset;
@@ -242,16 +251,27 @@ class Astro {
       this.moonPhase,
       this.moonIllumination});
 
-  factory Astro.fromJson(Map<String, dynamic> json) {
-    return _$AstroFromJson(json);
+  Astro.fromJson(Map<String, dynamic> json) {
+    sunrise = json['sunrise'];
+    sunset = json['sunset'];
+    moonrise = json['moonrise'];
+    moonset = json['moonset'];
+    moonPhase = json['moon_phase'];
+    moonIllumination = json['moon_illumination'];
   }
 
   Map<String, dynamic> toJson() {
-    return _$AstroToJson(this);
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['sunrise'] = sunrise;
+    data['sunset'] = sunset;
+    data['moonrise'] = moonrise;
+    data['moonset'] = moonset;
+    data['moon_phase'] = moonPhase;
+    data['moon_illumination'] = moonIllumination;
+    return data;
   }
 }
 
-@JsonSerializable()
 class Hour {
   int? timeEpoch;
   String? time;
@@ -261,7 +281,7 @@ class Hour {
   double? windKph;
   int? windDegree;
   String? windDir;
-  int? pressureMb;
+  double? pressureMb;
   double? pressureIn;
   double? precipMm;
   double? precipIn;
@@ -275,11 +295,11 @@ class Hour {
   int? chanceOfRain;
   int? willItSnow;
   int? chanceOfSnow;
-  int? visKm;
-  int? visMiles;
+  double? visKm;
+  double? visMiles;
   double? gustMph;
   double? gustKph;
-  int? uv;
+  double? uv;
 
   Hour(
       {this.timeEpoch,
@@ -310,66 +330,69 @@ class Hour {
       this.gustKph,
       this.uv});
 
-  factory Hour.fromJson(Map<String, dynamic> json) {
-    return _$HourFromJson(json);
+  Hour.fromJson(Map<String, dynamic> json) {
+    timeEpoch = json['time_epoch'];
+    time = json['time'];
+    tempC = json['temp_c'];
+    isDay = json['is_day'];
+    condition = json['condition'] != null
+        ? new Condition.fromJson(json['condition'])
+        : null;
+    windKph = json['wind_kph'];
+    windDegree = json['wind_degree'];
+    windDir = json['wind_dir'];
+    pressureMb = json['pressure_mb'];
+    pressureIn = json['pressure_in'];
+    precipMm = json['precip_mm'];
+    precipIn = json['precip_in'];
+    humidity = json['humidity'];
+    cloud = json['cloud'];
+    feelslikeC = json['feelslike_c'];
+    windchillC = json['windchill_c'];
+    heatindexC = json['heatindex_c'];
+    dewpointC = json['dewpoint_c'];
+    willItRain = json['will_it_rain'];
+    chanceOfRain = json['chance_of_rain'];
+    willItSnow = json['will_it_snow'];
+    chanceOfSnow = json['chance_of_snow'];
+    visKm = json['vis_km'];
+    visMiles = json['vis_miles'];
+    gustMph = json['gust_mph'];
+    gustKph = json['gust_kph'];
+    uv = json['uv'];
   }
 
   Map<String, dynamic> toJson() {
-    return _$HourToJson(this);
-  }
-}
-
-@JsonSerializable()
-class Alerts {
-  List<Alert>? alert;
-  Alerts({
-    required this.alert,
-  });
-
-  Alerts.fromJson(Map<String, dynamic> json) {
-    alert = json["alert"];
-  }
-  toJson() {
-    return _$AlertsToJson(this);
-  }
-}
-
-@JsonSerializable()
-class Alert {
-  String? headline;
-  String? msgtype;
-  String? severity;
-  String? urgency;
-  String? areas;
-  String? category;
-  String? certainty;
-  String? event;
-  String? note;
-  String? effective;
-  String? expires;
-  String? desc;
-  String? instruction;
-
-  Alert(
-      {this.headline,
-      this.msgtype,
-      this.severity,
-      this.urgency,
-      this.areas,
-      this.category,
-      this.certainty,
-      this.event,
-      this.note,
-      this.effective,
-      this.expires,
-      this.desc,
-      this.instruction});
-
-  factory Alert.fromJson(Map<String, dynamic> json) {
-    return _$AlertFromJson(json);
-  }
-
-  Map<String, dynamic> toJson() {
-    return _$AlertToJson(this);
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['time_epoch'] = timeEpoch;
+    data['time'] = time;
+    data['temp_c'] = tempC;
+    data['is_day'] = isDay;
+    if (condition != null) {
+      data['condition'] = condition!.toJson();
+    }
+    data['wind_kph'] = windKph;
+    data['wind_degree'] = windDegree;
+    data['wind_dir'] = windDir;
+    data['pressure_mb'] = pressureMb;
+    data['pressure_in'] = pressureIn;
+    data['precip_mm'] = precipMm;
+    data['precip_in'] = precipIn;
+    data['humidity'] = humidity;
+    data['cloud'] = cloud;
+    data['feelslike_c'] = feelslikeC;
+    data['windchill_c'] = windchillC;
+    data['heatindex_c'] = heatindexC;
+    data['dewpoint_c'] = dewpointC;
+    data['will_it_rain'] = willItRain;
+    data['chance_of_rain'] = chanceOfRain;
+    data['will_it_snow'] = willItSnow;
+    data['chance_of_snow'] = chanceOfSnow;
+    data['vis_km'] = visKm;
+    data['vis_miles'] = visMiles;
+    data['gust_mph'] = gustMph;
+    data['gust_kph'] = gustKph;
+    data['uv'] = uv;
+    return data;
   }
 }

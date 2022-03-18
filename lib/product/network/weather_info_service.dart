@@ -14,8 +14,8 @@ abstract class IGetWeatherInfoService {
 
   IGetWeatherInfoService(this.dio);
 
-  Future<CurrentModel?> getCurrentData(String city);
-  Future<ForecastModel?> getForecastData(String city);
+  Future<RealTimeModel?> getCurrentData(String city);
+  Future<ForeCastModel?> getForecastData(String city, {int day});
   Future<AstronomyModel?> getAstronomyData(String city);
   Future<LocationModel?> getLocationData(String city);
 }
@@ -24,12 +24,12 @@ class GetWeatherInfoService extends IGetWeatherInfoService {
   GetWeatherInfoService(NetworkManager dio) : super(Dio());
 
   @override
-  Future<CurrentModel?> getCurrentData(String city) async {
+  Future<RealTimeModel?> getCurrentData(String city) async {
     try {
       final response = await dio.get(
           "${ServicePath.base_Url.rawValue}${ServicePath.current.rawValue}${ServicePath.api_key.rawValue}&q=$city&aqi=yes");
       if (response.statusCode == 200) {
-        return CurrentModel.fromJson(response.data);
+        return RealTimeModel.fromJson(response.data);
       }
     } on DioError catch (e) {
       log("message: ${e.message}");
@@ -40,12 +40,12 @@ class GetWeatherInfoService extends IGetWeatherInfoService {
   }
 
   @override
-  Future<ForecastModel?> getForecastData(String city) async {
+  Future<ForeCastModel?> getForecastData(String city, {int day = 7}) async {
     try {
       final response = await dio.get(
-          "${ServicePath.base_Url.rawValue}${ServicePath.forecast.rawValue}${ServicePath.api_key.rawValue}&q=$city&aqi=yes");
+          "${ServicePath.base_Url.rawValue}${ServicePath.forecast.rawValue}${ServicePath.api_key.rawValue}&q=$city&days=$day&aqi=yes");
       if (response.statusCode == 200) {
-        return ForecastModel.fromJson(response.data);
+        return ForeCastModel.fromJson(response.data);
       }
     } on DioError catch (e) {
       log("message: ${e.message}");

@@ -1,10 +1,10 @@
-class CurrentModel {
+class RealTimeModel {
   Location? location;
   Current? current;
 
-  CurrentModel({this.location, this.current});
+  RealTimeModel({this.location, this.current});
 
-  CurrentModel.fromJson(Map<String, dynamic> json) {
+  RealTimeModel.fromJson(Map<String, dynamic> json) {
     location =
         json['location'] != null ? Location.fromJson(json['location']) : null;
     current =
