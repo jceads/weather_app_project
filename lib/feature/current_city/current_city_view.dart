@@ -4,6 +4,7 @@ import 'package:weather_with_chad_api/core/custom_widgets/city_name_text.dart';
 import 'package:weather_with_chad_api/core/custom_widgets/hours_of_day.dart';
 import 'package:weather_with_chad_api/core/custom_widgets/next_days_temp.dart';
 import 'package:weather_with_chad_api/core/custom_widgets/standart_divider.dart';
+import 'package:weather_with_chad_api/product/models/base_model.dart/base_model.dart';
 import 'package:weather_with_chad_api/product/models/forecast_model.dart';
 import 'package:weather_with_chad_api/product/models/realtime_model.dart';
 
@@ -15,69 +16,92 @@ import '../../core/custom_widgets/top_bar.dart';
 class CurrentCityView extends StatelessWidget {
   CurrentCityView(
       {Key? key,
-      required this.realTimeModel,
-      required this.foreCastModel,
       required this.currentIndex,
+      required this.model,
       required this.index})
       : super(key: key);
-  RealTimeModel? realTimeModel;
-  ForeCastModel? foreCastModel;
+
   int index;
   int currentIndex;
+  BaseModel? model;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(colors: [
-            Color.fromARGB(255, 211, 102, 0),
-            Colors.yellow,
-          ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
-        ),
-        child: Padding(
-          padding: PaddingValue.padAll,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              TopBarWidget(
-                onTapEvent: () {},
-                textDays: realTimeModel?.current?.condition?.text ?? "null",
+      body: Padding(
+        padding: PaddingValue.padAll,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            currentOverview(context),
+            tomorrowsView(context),
+            // hourOverview(context),
+            Expanded(
+                child: Container(
+              child: ListView.builder(
+                itemBuilder: (context, index) =>
+                    HourOfDay(model: model?.foreCastModel, index: index),
+                itemCount: model
+                    ?.foreCastModel?.forecast?.forecastday?[index].hour?.length,
               ),
-              const SizedBox(height: 20),
-              FirstHalfBuil(context, index),
-              Column(
-                children: [
-                  stdDivider(),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.12,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) =>
-                          NextDaysTemp(model: foreCastModel, index: index),
-                      itemCount: foreCastModel?.forecast?.forecastday?.length,
-                    ),
-                  ),
-                  stdDivider(),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    height: 200,
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return HourOfDay(
-                            model: foreCastModel ?? ForeCastModel(),
-                            index: index);
-                      },
-                      itemCount: foreCastModel
-                          ?.forecast?.forecastday?[index].hour?.length,
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
+            ))
+          ],
         ),
+      ),
+    );
+  }
+
+  Container hourOverview(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.35,
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return HourOfDay(
+                    model: model?.foreCastModel ?? ForeCastModel(),
+                    index: index);
+              },
+              itemCount: model
+                  ?.foreCastModel?.forecast?.forecastday?[index].hour?.length,
+            ),
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  Container tomorrowsView(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const stdDivider(),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.12,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) =>
+                  NextDaysTemp(model: model?.foreCastModel, index: index),
+              itemCount: model?.foreCastModel?.forecast?.forecastday?.length,
+            ),
+          ),
+          const stdDivider(),
+        ],
+      ),
+    );
+  }
+
+  Container currentOverview(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          FirstHalfBuil(context, index),
+        ],
       ),
     );
   }
@@ -87,7 +111,8 @@ class CurrentCityView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Column(children: [
-          CustomCityText(realTimeModel?.location?.name ?? "City null", context),
+          CustomCityText(
+              model?.realTimeModel?.location?.name ?? "City null", context),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -95,13 +120,14 @@ class CurrentCityView extends StatelessWidget {
                 (index) => Icon(Icons.circle, size: currentIndex == i ? 8 : 4)),
           ),
           LittleSizedBox(context, 2),
-          currentDegree(context, "${realTimeModel?.current?.tempC}"),
+          currentDegree(context, "${model?.realTimeModel?.current?.tempC}"),
           TodaysHighestLatest(
-              highest: "${realTimeModel?.current?.humidity}", lowest: "19"),
+              highest: "${model?.realTimeModel?.current?.humidity}",
+              lowest: "19"),
           LittleSizedBox(context, 5),
           commentOfTheDay(
-              context, "${realTimeModel?.current?.condition?.text}"),
-          feelsDegree(context, "${realTimeModel?.current?.feelslikeC}"),
+              context, "${model?.realTimeModel?.current?.condition?.text}"),
+          feelsDegree(context, "${model?.realTimeModel?.current?.feelslikeC}"),
           LittleSizedBox(context, 2),
         ]),
         TodaysIcon(context: context, icon: Icons.sunny)

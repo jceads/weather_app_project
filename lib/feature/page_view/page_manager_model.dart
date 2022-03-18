@@ -25,7 +25,6 @@ class PageManagerCubit extends Cubit<PageManagerState> {
   }
 
   Future<void> getData(String city) async {
-    // await Future.delayed(const Duration(seconds: 2));
     if (oldModel == null) {
       oldModel = await service.getAsBaseModel(city);
       if (oldModel != null) {
@@ -33,7 +32,7 @@ class PageManagerCubit extends Cubit<PageManagerState> {
         emit(ShowCitiesState(list: baseModelList));
       }
     } else {
-      if (oldModel == newModel) {
+      if (oldModel != newModel) {
         newModel = await service.getAsBaseModel(city);
         if (newModel != null) {
           baseModelList.add(newModel!);

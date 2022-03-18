@@ -15,7 +15,7 @@ class NextDaysTemp extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text("${DateTime.now().day + 1}",
+          Text("${DateTime.now().day + (index + 1)}",
               style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(
             height: 10,

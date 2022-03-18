@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_with_chad_api/core/constants/pad_value.dart';
+import 'package:weather_with_chad_api/core/custom_widgets/top_bar.dart';
 import 'package:weather_with_chad_api/feature/current_city/current_city_view.dart';
 import 'package:weather_with_chad_api/feature/page_view/page_manager_model.dart';
 import 'package:weather_with_chad_api/product/models/base_model.dart/base_model.dart';
@@ -25,66 +26,41 @@ class PageManager extends StatelessWidget {
           GetWeatherInfoService(NetworkManager.instance), cityInputController),
       child: BlocConsumer<PageManagerCubit, PageManagerState>(
         listener: (context, state) {
-          if (state is WriteCityState) {
-            AlertDialog(
-              title: Text("Enter a city name"),
-              actions: [
-                TextFormField(
-                  controller: cityInputController,
-                  onTap: () {
-                    context
-                        .read<PageManagerCubit>()
-                        .getData(cityInputController.text);
-                  },
-                ),
-              ],
-            );
-          }
+          // TODO: implement listener
         },
         builder: (context, state) {
-          if (state is ShowCitiesState) {
-            return PageView.builder(
-              itemBuilder: (context, index) => CurrentCityView(
-                  realTimeModel: list[index].realTimeModel,
-                  foreCastModel: list[index].foreCastModel,
-                  currentIndex: currentIndex,
-                  index: index),
-              itemCount: list.length,
-            );
-          } else if (state is WriteCityState) {
+          if (state is WriteCityState) {
             return Scaffold(
-              backgroundColor: Colors.red,
               body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: PaddingValue.padAll,
-                      child: TextField(
-                        controller: _controller,
-                        onSubmitted: (val) {
-                          context.read<PageManagerCubit>().getData(val);
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                      ),
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          context
-                              .read<PageManagerCubit>()
-                              .getData(_controller.text);
-                        },
-                        child: Text("Search"))
-                  ],
+                  child: Column(
+                children: [
+                  TextField(),
+                  ElevatedButton(
+                      onPressed: () {
+                        context.read<PageManagerCubit>().getData("istanbul");
+                      },
+                      child: Text("data"))
+                ],
+              )),
+            );
+          } else if (state is ShowCitiesState) {
+            return Scaffold(
+              body: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                    Color.fromARGB(255, 211, 102, 0),
+                    Colors.yellow,
+                  ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
                 ),
+                child: CurrentCityView(
+                    currentIndex: 0, index: 0, model: state.list.first),
               ),
             );
           } else {
             return Scaffold(
-              backgroundColor: Colors.amber,
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
         },
@@ -92,3 +68,15 @@ class PageManager extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+/*
+decoration: const BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                    Color.fromARGB(255, 211, 102, 0),
+                    Colors.yellow,
+                  ], begin: Alignment.bottomCenter, end: Alignment.topCenter),*/
