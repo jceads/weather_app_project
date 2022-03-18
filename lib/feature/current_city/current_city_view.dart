@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather_with_chad_api/core/constants/pad_value.dart';
 
 class CurrentCityView extends StatelessWidget {
-  const CurrentCityView({Key? key}) : super(key: key);
+  CurrentCityView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

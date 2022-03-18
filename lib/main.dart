@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
             color: Colors.white,
           )),
       debugShowCheckedModeBanner: false,
-      home: const CurrentCityView(),
+      home: CurrentCityView(),
     );
   }
 }
