@@ -41,11 +41,15 @@ class GetWeatherInfoService extends IGetWeatherInfoService {
     return null;
   }
 
+  //http://api.weatherapi.com/v1/forecast.json?key=e22f94a48e7e4f499d9191511221303&q=istanbul&days=7&aqi=yes&alerts=no
+
   @override
   Future<ForeCastModel?> getForecastData(String city, {int day = 7}) async {
     try {
       final response = await dio.get(
-          "${ServicePath.base_Url.rawValue}${ServicePath.forecast.rawValue}${ServicePath.api_key.rawValue}&q=$city&days=7&aqi=yes");
+          "${ServicePath.base_Url.rawValue}${ServicePath.forecast.rawValue}${ServicePath.api_key.rawValue}&q=$city&days=7&aqi=yes&alerts=no");
+      print(
+          "${ServicePath.base_Url.rawValue}${ServicePath.forecast.rawValue}${ServicePath.api_key.rawValue}&q=$city&days=7&aqi=yes&alerts=no");
       if (response.statusCode == 200) {
         return ForeCastModel.fromJson(response.data);
       }

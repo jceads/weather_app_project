@@ -35,15 +35,18 @@ class CurrentCityView extends StatelessWidget {
           children: [
             currentOverview(context),
             tomorrowsView(context),
-            hourValuesofTheDay()
+            hourValuesofTheDay(context)
           ],
         ),
       ),
     );
   }
 
-  Expanded hourValuesofTheDay() {
-    return Expanded(child: HourOfDay(model: model?.foreCastModel?.forecast));
+  Expanded hourValuesofTheDay(BuildContext context) {
+    return Expanded(
+        child: HourOfDay(
+      hourList: model?.foreCastModel?.forecast?.forecastday?[0].hour,
+    ));
   }
 
   Container tomorrowsView(BuildContext context) {
