@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 
 class TodaysIcon extends StatelessWidget {
-  final IconData icon;
+  final String img;
   BuildContext context;
 
-  TodaysIcon({Key? key, required this.icon, required this.context})
+  TodaysIcon({Key? key, required this.img, required this.context})
       : super(key: key);
 
   @override
   Widget build(context) {
     return Stack(children: [
       Positioned(
-        child: Icon(icon, size: 120),
+        child: Image.network(
+          "https:$img",
+          scale: 0.5,
+        ),
         left: 40,
         top: 40,
       ),

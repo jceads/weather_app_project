@@ -7,6 +7,7 @@ class NextDaysTemp extends StatelessWidget {
       : super(key: key);
   final ForeCastModel? model;
   final int index;
+//hour kısmı ile çalış
 
   @override
   Widget build(BuildContext context) {

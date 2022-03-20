@@ -170,6 +170,8 @@ class Condition {
   String? icon;
   int? code;
 
+  String get getImageUrl => "https://$icon";
+
   Condition({this.text, this.icon, this.code});
 
   Condition.fromJson(Map<String, dynamic> json) {

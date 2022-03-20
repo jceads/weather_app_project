@@ -35,43 +35,15 @@ class CurrentCityView extends StatelessWidget {
           children: [
             currentOverview(context),
             tomorrowsView(context),
-            // hourOverview(context),
-            Expanded(
-                child: Container(
-              child: ListView.builder(
-                itemBuilder: (context, index) =>
-                    HourOfDay(model: model?.foreCastModel, index: index),
-                itemCount: model
-                    ?.foreCastModel?.forecast?.forecastday?[index].hour?.length,
-              ),
-            ))
+            hourValuesofTheDay()
           ],
         ),
       ),
     );
   }
 
-  Container hourOverview(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.35,
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return HourOfDay(
-                    model: model?.foreCastModel ?? ForeCastModel(),
-                    index: index);
-              },
-              itemCount: model
-                  ?.foreCastModel?.forecast?.forecastday?[index].hour?.length,
-            ),
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
+  Expanded hourValuesofTheDay() {
+    return Expanded(child: HourOfDay(model: model?.foreCastModel?.forecast));
   }
 
   Container tomorrowsView(BuildContext context) {
@@ -130,13 +102,16 @@ class CurrentCityView extends StatelessWidget {
           feelsDegree(context, "${model?.realTimeModel?.current?.feelslikeC}"),
           LittleSizedBox(context, 2),
         ]),
-        TodaysIcon(context: context, icon: Icons.sunny)
+        TodaysIcon(
+            context: context,
+            img: model?.realTimeModel?.current?.condition?.icon ?? "")
       ],
     );
   }
 
   Text feelsDegree(BuildContext context, String degree) {
-    return Text("$degree°", style: Theme.of(context).textTheme.bodySmall);
+    return Text("feels like: $degree°",
+        style: Theme.of(context).textTheme.bodySmall);
   }
 
   Text commentOfTheDay(BuildContext context, String comment) =>

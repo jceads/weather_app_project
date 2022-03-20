@@ -45,7 +45,7 @@ class GetWeatherInfoService extends IGetWeatherInfoService {
   Future<ForeCastModel?> getForecastData(String city, {int day = 7}) async {
     try {
       final response = await dio.get(
-          "${ServicePath.base_Url.rawValue}${ServicePath.forecast.rawValue}${ServicePath.api_key.rawValue}&q=$city&days=$day&aqi=yes");
+          "${ServicePath.base_Url.rawValue}${ServicePath.forecast.rawValue}${ServicePath.api_key.rawValue}&q=$city&days=7&aqi=yes");
       if (response.statusCode == 200) {
         return ForeCastModel.fromJson(response.data);
       }
