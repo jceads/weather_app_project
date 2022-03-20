@@ -10,13 +10,14 @@ class TodaysIcon extends StatelessWidget {
   @override
   Widget build(context) {
     return Stack(children: [
-      Positioned(
-        child: Image.network(
-          "https:$img",
-          scale: 0.5,
+      Positioned.fill(
+        child: Align(
+          alignment: Alignment.center,
+          child: Image.network(
+            "https:$img",
+            scale: 0.5,
+          ),
         ),
-        left: 40,
-        top: 40,
       ),
       CircleAvatar(minRadius: 100, backgroundColor: Colors.white12),
     ]);

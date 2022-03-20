@@ -1,72 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:weather_with_chad_api/core/constants/pad_value.dart';
 import 'package:weather_with_chad_api/core/custom_widgets/city_name_text.dart';
 import 'package:weather_with_chad_api/core/custom_widgets/hours_of_day.dart';
 import 'package:weather_with_chad_api/core/custom_widgets/next_days_temp.dart';
 import 'package:weather_with_chad_api/core/custom_widgets/standart_divider.dart';
+import 'package:weather_with_chad_api/product/color_maker/color_generator.dart';
 import 'package:weather_with_chad_api/product/models/base_model.dart/base_model.dart';
-import 'package:weather_with_chad_api/product/models/forecast_model.dart';
-import 'package:weather_with_chad_api/product/models/realtime_model.dart';
 
 import '../../core/custom_widgets/little_spacer_sizedbox.dart';
 import '../../core/custom_widgets/todays_highest_lowest.dart';
 import '../../core/custom_widgets/todays_icon.dart';
-import '../../core/custom_widgets/top_bar.dart';
 
 class CurrentCityView extends StatelessWidget {
   CurrentCityView(
       {Key? key,
       required this.currentIndex,
       required this.model,
-      required this.index})
+      required this.index,
+      required this.iconBTNFunc})
       : super(key: key);
 
+  final VoidCallback iconBTNFunc;
   int index;
   int currentIndex;
   BaseModel? model;
+  double? get getTemp => model?.realTimeModel?.current?.tempC;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: PaddingValue.padAll,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            currentOverview(context),
-            tomorrowsView(context),
-            hourValuesofTheDay(context)
-          ],
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: ColorGen().generateColor(getTemp),
+        ),
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+              onPressed: iconBTNFunc, icon: const Icon(Icons.menu_rounded)),
+          title: Text(DateFormat.yMMMMd("en-US").format(DateTime.now())),
+        ),
+        body: Padding(
+          padding: PaddingValue.padAll,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              currentOverview(context),
+              tomorrowsView(context),
+              hourValuesofTheDay(context)
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Expanded hourValuesofTheDay(BuildContext context) {
-    return Expanded(
-        child: HourOfDay(
+  Widget hourValuesofTheDay(BuildContext context) {
+    return HourOfDay(
       hourList: model?.foreCastModel?.forecast?.forecastday?[0].hour,
-    ));
+    );
   }
 
-  Container tomorrowsView(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          const stdDivider(),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.12,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) =>
-                  NextDaysTemp(model: model?.foreCastModel, index: index),
-              itemCount: model?.foreCastModel?.forecast?.forecastday?.length,
-            ),
+  Widget tomorrowsView(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        const stdDivider(),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.12,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) =>
+                NextDaysTemp(model: model?.foreCastModel, index: index),
+            itemCount: model?.foreCastModel?.forecast?.forecastday?.length,
           ),
-          const stdDivider(),
-        ],
-      ),
+        ),
+        const stdDivider(),
+      ],
     );
   }
 

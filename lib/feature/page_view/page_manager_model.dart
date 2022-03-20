@@ -32,14 +32,15 @@ class PageManagerCubit extends Cubit<PageManagerState> {
     if (oldModel == null) {
       oldModel = await service.getAsBaseModel(city);
       if (oldModel != null) {
-        baseModelList.add(oldModel!);
+        baseModelList.insert(0, oldModel!);
         emit(ShowCitiesState(list: baseModelList));
       }
     } else {
       if (oldModel != newModel) {
         newModel = await service.getAsBaseModel(city);
         if (newModel != null) {
-          baseModelList.add(newModel!);
+          baseModelList.insert(0, newModel!);
+
           emit(ShowCitiesState(list: baseModelList));
         } else {
           emit(ErrorState());
@@ -47,12 +48,6 @@ class PageManagerCubit extends Cubit<PageManagerState> {
       }
       return;
     }
-    // if (model != null) {
-    //   baseModelList.add(model);
-    // } else {
-    //   emit(ErrorState());
-    // }
-    // emit(ShowCitiesState());
   }
 }
 
