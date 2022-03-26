@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:weather_with_chad_api/product/models/base_model.dart/base_model.dart';
-import 'package:weather_with_chad_api/product/network/weather_info_service.dart';
+import '../../product/models/base_model.dart/base_model.dart';
+import '../../product/network/weather_info_service.dart';
 
 class PageManagerCubit extends Cubit<PageManagerState> {
   PageManagerCubit(this.baseModelList, this.service, this.cityInputCont)
@@ -21,13 +21,13 @@ class PageManagerCubit extends Cubit<PageManagerState> {
 
   void redirect() {
     if (baseModelList.isEmpty) {
-      emit(WriteCityState());
+      emit(EmptyListState());
     } else {
       emit(ShowCitiesState(list: baseModelList));
     }
   }
 
-  Future<void> getData(String city) async {
+  Future<void> getCityData(String city) async {
     emit(LoadingState());
     if (oldModel == null) {
       oldModel = await service.getAsBaseModel(city);
@@ -67,3 +67,5 @@ class ShowCitiesState extends PageManagerState {
 class LoadingState extends PageManagerState {}
 
 class ErrorState extends PageManagerState {}
+
+class EmptyListState extends PageManagerState {}

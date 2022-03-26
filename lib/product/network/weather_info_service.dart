@@ -2,13 +2,13 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 
-import 'package:weather_with_chad_api/product/enums/service_path.dart';
-import 'package:weather_with_chad_api/product/models/astronomy_model.dart';
-import 'package:weather_with_chad_api/product/models/base_model.dart/base_model.dart';
-import 'package:weather_with_chad_api/product/models/forecast_model.dart';
-import 'package:weather_with_chad_api/product/models/location_model.dart';
-import 'package:weather_with_chad_api/product/models/realtime_model.dart';
-import 'package:weather_with_chad_api/product/network/network_manager.dart';
+import '../enums/service_path.dart';
+import '../models/astronomy_model.dart';
+import '../models/base_model.dart/base_model.dart';
+import '../models/forecast_model.dart';
+import '../models/location_model.dart';
+import '../models/realtime_model.dart';
+import 'network_manager.dart';
 
 abstract class IGetWeatherInfoService {
   final Dio dio;

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:weather_with_chad_api/product/models/forecast_model.dart';
-import 'package:weather_with_chad_api/product/models/realtime_model.dart';
+import '../forecast_model.dart';
+import '../realtime_model.dart';
 
 class BaseModel {
   ForeCastModel? foreCastModel;

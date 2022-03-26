@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ColorGen {
   double? degree;
-  List<Color> generateColor(double? degree) {
+  List<Color> generateColorList(double? degree) {
     if (degree != null) {
       if (degree > 15) {
         return [
@@ -25,4 +25,6 @@ class ColorGen {
     }
     return [];
   }
+
+  Color? generateColor(double? degree) {}
 }

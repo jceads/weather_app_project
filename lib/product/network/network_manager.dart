@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:weather_with_chad_api/product/enums/service_path.dart';
+import '../enums/service_path.dart';
 
 class NetworkManager {
   static NetworkManager? _instace;

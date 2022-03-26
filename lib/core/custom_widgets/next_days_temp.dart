@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weather_with_chad_api/product/models/forecast_model.dart';
-import 'package:weather_with_chad_api/product/models/realtime_model.dart';
+
+import '../../product/models/forecast_model.dart';
 
 class NextDaysTemp extends StatelessWidget {
   NextDaysTemp({Key? key, required this.model, required this.index})

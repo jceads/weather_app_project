@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_with_chad_api/core/constants/pad_value.dart';
+import '../constants/pad_value.dart';
 
 class TopBarWidget extends StatelessWidget {
   const TopBarWidget({

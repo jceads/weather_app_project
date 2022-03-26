@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_with_chad_api/product/models/forecast_model.dart';
+import '../../product/models/forecast_model.dart';
 
 class HourOfDay extends StatelessWidget {
   HourOfDay({Key? key, required this.hourList}) : super(key: key);

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_with_chad_api/core/constants/pad_value.dart';
-import 'package:weather_with_chad_api/core/custom_widgets/city_name_text.dart';
-import 'package:weather_with_chad_api/core/custom_widgets/hours_of_day.dart';
-import 'package:weather_with_chad_api/core/custom_widgets/next_days_temp.dart';
-import 'package:weather_with_chad_api/core/custom_widgets/standart_divider.dart';
-import 'package:weather_with_chad_api/product/color_maker/color_generator.dart';
-import 'package:weather_with_chad_api/product/models/base_model.dart/base_model.dart';
+import '../../core/constants/pad_value.dart';
+import '../../core/custom_widgets/city_name_text.dart';
+import '../../core/custom_widgets/hours_of_day.dart';
+import '../../core/custom_widgets/next_days_temp.dart';
+import '../../core/custom_widgets/standart_divider.dart';
+import '../../product/color_maker/color_generator.dart';
+import '../../product/models/base_model.dart/base_model.dart';
 
 import '../../core/custom_widgets/little_spacer_sizedbox.dart';
 import '../../core/custom_widgets/todays_highest_lowest.dart';
@@ -32,18 +32,18 @@ class CurrentCityView extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: ColorGen().generateColor(getTemp),
+          colors: ColorGen().generateColorList(getTemp),
         ),
       ),
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          centerTitle: true,
-          leading: IconButton(
-              onPressed: iconBTNFunc, icon: const Icon(Icons.menu_rounded)),
-          title: Text(DateFormat.yMMMMd("en-US").format(DateTime.now())),
-        ),
+        // appBar: AppBar(
+        //   backgroundColor: Colors.transparent,
+        //   elevation: 0,
+        //   centerTitle: true,
+        //   leading: IconButton(
+        //       onPressed: iconBTNFunc, icon: const Icon(Icons.menu_rounded)),
+        //   title: Text(DateFormat.yMMMMd("en-US").format(DateTime.now())),
+        // ),
         body: Padding(
           padding: PaddingValue.padAll,
           child: Column(
@@ -84,18 +84,16 @@ class CurrentCityView extends StatelessWidget {
     );
   }
 
-  Container currentOverview(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          FirstHalfBuil(context, index),
-        ],
-      ),
+  Column currentOverview(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        firstHalfBuil(context, index),
+      ],
     );
   }
 
-  Row FirstHalfBuil(BuildContext context, int i) {
+  Row firstHalfBuil(BuildContext context, int i) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
