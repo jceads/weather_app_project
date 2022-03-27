@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../product/models/base_model.dart/base_model.dart';
@@ -11,6 +11,7 @@ class PageManagerCubit extends Cubit<PageManagerState> {
   }
   List<BaseModel> baseModelList;
   TextEditingController cityInputCont;
+  List<String> _searchedCities = [];
 
   IGetWeatherInfoService service;
   BaseModel? oldModel;
@@ -27,7 +28,14 @@ class PageManagerCubit extends Cubit<PageManagerState> {
     }
   }
 
-  Future<void> getCityData(String city) async {
+  Future<dynamic> getCityData(String city, BuildContext context) async {
+    for (var i = 0; i < baseModelList.length; i++) {
+      if (city == _searchedCities[i]) {
+        return ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("City already added")));
+      }
+    }
+    _searchedCities.add(city);
     emit(LoadingState());
     if (oldModel == null) {
       oldModel = await service.getAsBaseModel(city);

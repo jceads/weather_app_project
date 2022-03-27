@@ -17,12 +17,12 @@ class CurrentCityView extends StatelessWidget {
       {Key? key,
       required this.currentIndex,
       required this.model,
-      required this.index,
+      required this.listLength,
       required this.iconBTNFunc})
       : super(key: key);
 
   final VoidCallback iconBTNFunc;
-  int index;
+  int listLength;
   int currentIndex;
   BaseModel? model;
   double? get getTemp => model?.realTimeModel?.current?.tempC;
@@ -36,14 +36,6 @@ class CurrentCityView extends StatelessWidget {
         ),
       ),
       child: Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: Colors.transparent,
-        //   elevation: 0,
-        //   centerTitle: true,
-        //   leading: IconButton(
-        //       onPressed: iconBTNFunc, icon: const Icon(Icons.menu_rounded)),
-        //   title: Text(DateFormat.yMMMMd("en-US").format(DateTime.now())),
-        // ),
         body: Padding(
           padding: PaddingValue.padAll,
           child: Column(
@@ -88,7 +80,7 @@ class CurrentCityView extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 20),
-        firstHalfBuil(context, index),
+        firstHalfBuil(context, listLength),
       ],
     );
   }
@@ -103,8 +95,10 @@ class CurrentCityView extends StatelessWidget {
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(i,
-                (index) => Icon(Icons.circle, size: currentIndex == i ? 8 : 4)),
+            children: List.generate(
+                listLength,
+                (index) => Icon(Icons.circle,
+                    size: (currentIndex + 1) == index ? 8 : 4)),
           ),
           LittleSizedBox(context, 2),
           currentDegree(context, "${model?.realTimeModel?.current?.tempC}"),

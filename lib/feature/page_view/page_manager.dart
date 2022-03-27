@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -35,13 +37,14 @@ class PageManager extends StatelessWidget {
         builder: (context, state) {
           void _search(String city) {
             isElevated = !isElevated;
-            context.read<PageManagerCubit>().getCityData(city);
+            context.read<PageManagerCubit>().getCityData(city, context);
+            _controller.text = "";
           }
 
           if (state is EmptyListState) {
             return searchScaffold(context, _search);
           } else if (state is ShowCitiesState) {
-            return cityDataScaffold(state, context);
+            return cityDataScaffold(state, context, _search);
           } else {
             return centerCircular();
           }
@@ -133,7 +136,8 @@ class PageManager extends StatelessWidget {
     );
   }
 
-  Widget cityDataScaffold(ShowCitiesState state, BuildContext context) {
+  Widget cityDataScaffold(
+      ShowCitiesState state, BuildContext context, void _search(String city)) {
     return PageView.builder(
       itemBuilder: (context, index) {
         return Stack(
@@ -142,9 +146,11 @@ class PageManager extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: ColorGen().generateColorList(
-                          state.list[index].realTimeModel?.current?.tempC))),
+                gradient: LinearGradient(
+                  colors: ColorGen().generateColorList(
+                      state.list[index].realTimeModel?.current?.tempC),
+                ),
+              ),
             ),
             Scaffold(
               appBar: AppBar(
@@ -153,11 +159,9 @@ class PageManager extends StatelessWidget {
                 centerTitle: true,
                 leading: IconButton(
                     onPressed: () {
-                      context
-                          .read<PageManagerCubit>()
-                          .goToState(EmptyListState());
+                      showSheet(context, _search);
                     },
-                    icon: const Icon(Icons.menu_rounded)),
+                    icon: const Icon(Icons.search)),
                 title: Text(DateFormat.yMMMMd("en-US").format(DateTime.now())),
               ),
               body: CurrentCityView(
@@ -166,7 +170,7 @@ class PageManager extends StatelessWidget {
                       .goToState(WriteCityState()),
                   currentIndex: currentIndex,
                   model: state.list[index],
-                  index: index),
+                  listLength: index),
             )
           ],
         );
